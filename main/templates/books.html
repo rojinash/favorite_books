@@ -15,11 +15,11 @@
     <form action="/add_book" method="POST">
         {%csrf_token%}
         <div>
-            <label for="">Title</label>
+            <label for="">Title: </label>
             <input type="text" name="title" id="">
         </div>
         <div>
-            <label for="">Description</label>
+            <label for="">Description: </label>
             <textarea name="desc" id="" cols="30" rows="10"></textarea>
         </div>
         <button>Add</button>

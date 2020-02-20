@@ -8,9 +8,11 @@ def index(request):
 def register(request):
     form = request.POST
     errors = User.objects.reg_validator(form)
+    newstr = ''
     if len(errors) > 0:
-        for single_error in errors.values():
-            messages.error(request, single_error)
+        for key, single_error in errors.items():
+            newstr=f'{key}: {single_error}'
+            messages.error(request, newstr)
         return redirect('/')
     hashed_pw = bcrypt.hashpw(form['password'].encode(), bcrypt.gensalt()).decode()
     current_user = User.objects.create(first_name=form['first_name'], last_name=form['last_name'], email=form['email'], password=hashed_pw)
@@ -29,11 +31,28 @@ def login(request):
     return redirect('/books')
 
 def books(request):
+    if 'user_id' not in request.session:
+        return redirect('/')
     context = {
         'user':User.objects.get(id=request.session['user_id']),
         'books':Book.objects.all(),
     }
     return render(request, 'books.html', context)
+
+def delete(request, book_id):
+    if request.method != 'POST':
+        return redirect('/books')
+    book_to_delete = Book.objects.get(id=book_id)
+    book_to_delete.delete()
+    return redirect('/books')
+
+def update(request, book_id):
+    if request.method != 'POST':
+        return redirect('/books')
+    book_to_update = Book.objects.get(id=book_id)
+    book_to_update.desc = request.POST['desc']
+    book_to_update.save()
+    return redirect(f'/books/{book_id}')
 
 def add_book(request):
     form = request.POST

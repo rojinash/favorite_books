@@ -16,11 +16,12 @@
     <p>Last updated at: {{book.updated_at}}</p>
 
     {% if current_user.id == book.uploaded_by.id %}
-    <form action="/edit_desc" method="POST">
+    <form action="/edit_desc/{{ book.id }}" method="POST">
+        {% csrf_token %}
         <p>Description: </p>
         <textarea name="desc" id="" cols="30" rows="10">{{book.desc}}</textarea>
         <button>Update!</button>
-        <button><a href="/delete">Delete!</a></button>
+        <button><a href="/delete/{{ book.id }}">Delete!</a></button>
     </form>
     {%else%}
     <p>Description: {{book.desc}}</p>

@@ -9,6 +9,10 @@
 
 <body>
     <h1>Registration</h1>
+    {% for message in messages%}
+    <p>{{message}}</p>
+    {% endfor %}
+
     <form action="/register" method="POST">
         {%csrf_token%}
         <div>
