@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favorite Books</title>
+</head>
+
+<body>
+    <h1>Welcome, {{current_user.first_name}}</h1>
+    <hr>
+    <h2>{{book.title}}</h2>
+    <p>Added by: {{book.uploaded_by.first_name}} {{book.uploaded_by.last_name}}</p>
+    <p>Added on: {{book.created_at}}</p>
+    <p>Last updated at: {{book.updated_at}}</p>
+
+    {% if current_user.id == book.uploaded_by.id %}
+    <form action="/edit_desc" method="POST">
+        <p>Description: </p>
+        <textarea name="desc" id="" cols="30" rows="10">{{book.desc}}</textarea>
+        <button>Update!</button>
+        <button><a href="/delete">Delete!</a></button>
+    </form>
+    {%else%}
+    <p>Description: {{book.desc}}</p>
+    {%endif%}
+    <h3>Users Who like this Book: </h3>
+    <ul>
+        {%for user in book.users_who_like.all %} {% if user.id == current_user.id %}
+        <li>{{user.first_name}} {{user.last_name}} <a href="/unfav/{{book.id}}">Un-Favorite!</a></li>
+        {%else%}
+        <li>{{user.first_name}} {{user.last_name}}</li>
+        {%endif%} {%endfor%}
+    </ul>
+</body>
+
+</html>
